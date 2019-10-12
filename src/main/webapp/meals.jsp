@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core_1_1" %>
 <%@ page import="java.util.List" %>
 <%@ page import="ru.javawebinar.topjava.model.MealTo" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -10,26 +11,47 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<%
-    List<MealTo> names = (List<MealTo>) request.getAttribute("mealList");
-    out.println(" <style>\n" +
-            "        table, th, td {\n" +
-            "            border: 1px solid black;\n" +
-            "        }\n" +
-            "    </style><table><tr>");
-
-    for (MealTo m : names) {
-        out.println("<th>" + m.getDateTime().toLocalTime() + " "+m.getDateTime().toLocalDate()  + "</th>");
+<style>
+    th,td {
+        border-collapse: collapse;
+        border: 3px solid grey;
+        width: 200px;
     }
-    out.println("</tr><tr>");
 
-    for (MealTo m : names) {
-        if (m.getExcess())
-            out.println("<td><font size=\"3\" color=\"red\">" + m.getDescription() + "   " + "</font></td>");
-        else
-            out.println("<td><font size=\"3\" color=\"green\">" + m.getDescription() + "</font></td>");
+
+    table {
+        border-collapse: collapse;
+        border: 3px solid grey;
     }
-    out.println("</tr></table>");
-%>
+
+    .Excess {
+        color: green;
+    }
+
+    .noExcess {
+        color: red;
+    }
+
+</style>
+
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Meal</th>
+        <th>Callories</th>
+    </tr>
+</table>
+
+<c:forEach items="${mealList}" var="meal">
+        <table class="${meal.isExcess()? 'Excess': 'noExcess'}">
+            <tr>
+                <td>${meal.getDateTime().toLocalDate()} ${meal.getDateTime().toLocalTime()}</td>
+                <td>${meal.getDescription()}</td>
+                <td>${meal.getCalories()}</td>
+            </tr>
+        </table>
+
+</c:forEach>
+
 </body>
 </html>
